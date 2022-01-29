@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: PB1234
+      MYSQL_DATABASE: phonebook_db
+      MYSQL_USER: devalps
+      MYSQL_PASSWORD: Devalps123
+
+    volumes:
+      - db-data:/var/lib/mysql  
+
+    configs:
+      - source: table
+        target: /docker-entrypoint-initdb.d/init.sql  
+    
+    networks:
+      - PBnet
+
+  app-server:
+    env_file: .env
+    image: "${ECR_REPO}:latest"
+    deploy:
+      mode: global
+      update_config:
+        parallelism: 2        # creat 2 containers at the same time.
+        delay: 5s             # wait 5s between creation.
+        order: start-first    # first start news, then destroy olds.
+
+    ports:
+      - "80:80"
+
+    networks:
+      - PBnet
+
+networks:
+  PBnet:
+    driver: overlay
+
+volumes:
+  db-data:
+
+configs:
+  table:
+    file: ./init.sql  
+
