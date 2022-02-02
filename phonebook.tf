@@ -2,7 +2,6 @@ provider "aws" {
   region = "us-east-1"
   //  access_key = ""
   //  secret_key = ""
-  //  If you have entered your credentials in AWS CLI before, you do not need to use these arguments.
 }
 
 
@@ -166,7 +165,7 @@ resource "aws_instance" "docker-machine-leader-manager" {
   root_block_device {
       volume_size = 16
   }  
-  //  Write your pem file name
+ 
   security_groups = ["alp-docker-swarm-sec-gr"]
   iam_instance_profile = aws_iam_instance_profile.ec2ecr-profile.name
   user_data = data.template_file.leader-master.rendered
@@ -179,7 +178,7 @@ resource "aws_instance" "docker-machine-managers" {
   ami             = "ami-087c17d1fe0178315"
   instance_type   = "t2.micro"
   key_name        = "firstkey"
-  //  Write your pem file name
+ 
   security_groups = ["alp-docker-swarm-sec-gr"]
   iam_instance_profile = aws_iam_instance_profile.ec2ecr-profile.name
   count = 2
@@ -194,7 +193,7 @@ resource "aws_instance" "docker-machine-workers" {
   ami             = "ami-087c17d1fe0178315"
   instance_type   = "t2.micro"
   key_name        = "firstkey"
-  //  Write your pem file name
+
   security_groups = ["alp-docker-swarm-sec-gr"]
   iam_instance_profile = aws_iam_instance_profile.ec2ecr-profile.name
   count = 2
